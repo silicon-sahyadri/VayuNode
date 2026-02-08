@@ -104,11 +104,13 @@
                             Deployment</span>
                     </h1>
                     <p class="text-lg text-slate-400 mb-8 max-w-lg leading-relaxed">
-                        Scalable, community-led Air Quality Index monitoring powered by open hardware. Join Silicon
-                        Sahyadri in building the largest decentralized environmental sensor network.
+                        VayuNode is a community-owned data layer for the environment.
+                        We code for reliability and document for the community—building a professional-grade,
+                        open-source
+                        stack that belongs to the public.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="https://github.com/silicon-sahyadri/vayu-node"
+                        <a href="https://github.com/silicon-sahyadri/VayuNode"
                             class="flex items-center justify-center gap-2 bg-white text-brand-base px-6 py-3 rounded-lg font-bold hover:bg-slate-200 transition-colors">
                             <i data-lucide="github" class="w-5 h-5"></i>
                             View Source
@@ -136,7 +138,7 @@
                                 </span>
                                 <span class="text-sm font-mono text-brand-success">LIVE DATA FEED</span>
                             </div>
-                            <span class="text-xs text-slate-500 font-mono">ID: VYU-NODE-01</span>
+                            <span class="text-xs text-slate-500 font-mono">ID: DEMO-NODE-01</span>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
@@ -147,7 +149,7 @@
                                     <i data-lucide="wind" class="text-brand-accent w-5 h-5"></i>
                                 </div>
                                 <div class="flex items-baseline gap-2">
-                                    <span class="text-4xl font-bold text-white">42</span>
+                                    <span id="val-aqi" class="text-4xl font-bold text-white">42</span>
                                     <span
                                         class="text-sm text-brand-success bg-brand-success/10 px-2 py-0.5 rounded">Good</span>
                                 </div>
@@ -163,7 +165,7 @@
                                     <span class="text-slate-400 text-xs">Temperature</span>
                                     <i data-lucide="thermometer" class="text-rose-400 w-4 h-4"></i>
                                 </div>
-                                <div class="text-2xl font-bold text-white">28.4°C</div>
+                                <div id="val-temp" class="text-2xl font-bold text-white">28.4°C</div>
                             </div>
 
                             <!-- Humidity -->
@@ -172,7 +174,7 @@
                                     <span class="text-slate-400 text-xs">Humidity</span>
                                     <i data-lucide="droplets" class="text-blue-400 w-4 h-4"></i>
                                 </div>
-                                <div class="text-2xl font-bold text-white">62%</div>
+                                <div id="val-humidity" class="text-2xl font-bold text-white">62%</div>
                             </div>
 
                             <!-- VOC -->
@@ -181,7 +183,7 @@
                                     <span class="text-slate-400 text-xs">VOC</span>
                                     <i data-lucide="flask-conical" class="text-purple-400 w-4 h-4"></i>
                                 </div>
-                                <div class="text-2xl font-bold text-white">125 <span
+                                <div id="val-voc" class="text-2xl font-bold text-white">125 <span
                                         class="text-xs font-normal text-slate-500">ppb</span></div>
                             </div>
 
@@ -191,11 +193,38 @@
                                     <span class="text-slate-400 text-xs">CO2 (est)</span>
                                     <i data-lucide="cloud" class="text-stone-400 w-4 h-4"></i>
                                 </div>
-                                <div class="text-2xl font-bold text-white">410 <span
+                                <div id="val-co2" class="text-2xl font-bold text-white">410 <span
                                         class="text-xs font-normal text-slate-500">ppm</span></div>
                             </div>
                         </div>
+                        <div id="live-api-badge"
+                            class="mt-4 text-[10px] text-slate-500 text-center uppercase tracking-wider hidden">
+                            <span class="text-brand-accent">●</span> Live Demo Data from Open-Meteo API
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Significance / Logic Section -->
+    <section class="py-12 bg-slate-900 border-y border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 text-center md:text-left">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Why VayuNode?</h3>
+                    <p class="text-slate-400 text-sm">Most air quality data is proprietary. We are building an open data
+                        layer where revenue from industrial deployments funds open-source R&D.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Breadboard to Deployment</h3>
+                    <p class="text-slate-400 text-sm">If it doesn't work on the bench, it won't work in the monsoon. We
+                        emphasize documentation so a hobbyist can build what a professional deploys.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Scalable Architecture</h3>
+                    <p class="text-slate-400 text-sm">From Pico 2W to Cloud. Lightweight MQTT orchestration designed to
+                        handle 1,000+ nodes across Kerala.</p>
                 </div>
             </div>
         </div>
@@ -207,7 +236,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-white mb-4">Open Source Hardware Stack</h2>
                 <p class="text-slate-400 max-w-2xl mx-auto">Built on accessible, affordable, and powerful components.
-                    Replicable by anyone.</p>
+                </p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
@@ -219,13 +248,13 @@
                         <i data-lucide="cpu" class="text-brand-accent w-6 h-6"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2">Raspberry Pi Pico 2W</h3>
-                    <p class="text-slate-400 text-sm mb-4">Dual-core RP2040 processor with built-in Wi-Fi logic. The
-                        brain of VayuNode handling data acquisition and MQTT transmission.</p>
+                    <p class="text-slate-400 text-sm mb-4">Dual-core RP2040 processor providing the power for complex
+                        IoT logic and data acquisition.</p>
                     <ul class="text-sm text-slate-500 space-y-2">
                         <li class="flex items-center gap-2"><i data-lucide="check"
                                 class="w-4 h-4 text-brand-success"></i> Dual-core Arm Cortex M0+</li>
                         <li class="flex items-center gap-2"><i data-lucide="check"
-                                class="w-4 h-4 text-brand-success"></i> 2.4GHz 802.11n Wireless</li>
+                                class="w-4 h-4 text-brand-success"></i> WI-Fi & Bluetooth Support</li>
                     </ul>
                 </div>
 
@@ -237,13 +266,13 @@
                         <i data-lucide="wind" class="text-brand-accent w-6 h-6"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2">Bosch BME688</h3>
-                    <p class="text-slate-400 text-sm mb-4">The first gas sensor with Artificial Intelligence. Measures
-                        gas, humidity, temperature, and barometric pressure.</p>
+                    <p class="text-slate-400 text-sm mb-4">AI/Machine Learning gas sensing for precise VOC and CO2
+                        measurements.</p>
                     <ul class="text-sm text-slate-500 space-y-2">
                         <li class="flex items-center gap-2"><i data-lucide="check"
                                 class="w-4 h-4 text-brand-success"></i> AI-enabled Gas Analysis</li>
                         <li class="flex items-center gap-2"><i data-lucide="check"
-                                class="w-4 h-4 text-brand-success"></i> Detects VOCs & Sulphur</li>
+                                class="w-4 h-4 text-brand-success"></i> Portable Firmware Modules</li>
                     </ul>
                 </div>
 
@@ -255,11 +284,11 @@
                         <i data-lucide="wifi" class="text-brand-accent w-6 h-6"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2">NB-IoT Connectivity</h3>
-                    <p class="text-slate-400 text-sm mb-4">Industrial-grade cellular connectivity for remote deployments
-                        where Wi-Fi isn't available.</p>
+                    <p class="text-slate-400 text-sm mb-4">Scaling to remote areas without Wi-Fi using industrial
+                        telecommunication standards.</p>
                     <ul class="text-sm text-slate-500 space-y-2">
                         <li class="flex items-center gap-2"><i data-lucide="check"
-                                class="w-4 h-4 text-brand-success"></i> Low Power Consumption</li>
+                                class="w-4 h-4 text-brand-success"></i> Remote Scalability</li>
                         <li class="flex items-center gap-2"><i data-lucide="check"
                                 class="w-4 h-4 text-brand-success"></i> Deep Indoor Penetration</li>
                     </ul>
@@ -277,8 +306,7 @@
                     <div>
                         <h2 class="text-3xl font-bold text-white mb-6">Powered by Silicon Sahyadri</h2>
                         <p class="text-slate-400 mb-6">
-                            We are a Kerala-based engineering community dedicated to building real hardware that solves
-                            real problems. VayuNode is our flagship initiative to democratize air quality data.
+                            VayuNode is a flagship initiative to democratize air quality data in Kerala.
                         </p>
                         <div class="space-y-4 mb-8">
                             <div class="flex items-start gap-4">
@@ -287,18 +315,18 @@
                                 </div>
                                 <div>
                                     <h4 class="text-white font-medium">Community-First Model</h4>
-                                    <p class="text-sm text-slate-500">Revenue generated from hardware kits is reinvested
-                                        directly into community growth and open-source R&D.</p>
+                                    <p class="text-sm text-slate-500">Revenue generated from hardware deployments is
+                                        reinvested into community growth and open-source R&D.</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
                                 <div class="w-8 h-8 rounded bg-brand-accent/10 flex items-center justify-center mt-1">
-                                    <i data-lucide="graduation-cap" class="text-brand-accent w-5 h-5"></i>
+                                    <i data-lucide="code" class="text-brand-accent w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-white font-medium">Educational Impact</h4>
-                                    <p class="text-sm text-slate-500">Partnerships with engineering colleges to train
-                                        students in embedded systems and IoT.</p>
+                                    <h4 class="text-white font-medium">Developer Task</h4>
+                                    <p class="text-sm text-slate-500">We are building a lightweight MQTT pipeline for
+                                        1,000+ nodes. Document every API and pinout clearly.</p>
                                 </div>
                             </div>
                         </div>
@@ -306,9 +334,10 @@
                     <div class="relative mt-8 lg:mt-0">
                         <div
                             class="aspect-video bg-slate-800 rounded-xl flex items-center justify-center border border-slate-700">
-                            <div class="text-center">
-                                <i data-lucide="heart-handshake" class="w-16 h-16 text-slate-500 mx-auto mb-4"></i>
-                                <span class="text-slate-400 font-medium">Community Image/Video Placeholder</span>
+                            <!-- Placeholder for Community Image -->
+                            <div class="text-center p-8">
+                                <i data-lucide="mic" class="w-12 h-12 text-slate-600 mx-auto mb-4"></i>
+                                <p class="text-slate-500 font-medium">Silicon Sahyadri Meetup</p>
                             </div>
                         </div>
                     </div>
@@ -322,16 +351,15 @@
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="text-3xl font-bold text-white mb-6">Join the Movement</h2>
             <p class="text-slate-400 mb-8">
-                Whether you're a hardware engineer, a frontend developer, or a data scientist, VayuNode needs your
-                skills.
-                Help us build a cleaner future for Kerala and beyond.
+                Whether you're validatin hardware on a breadboard or architecting cloud data pipelines, VayuNode needs
+                you.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#"
+                <a href="https://github.com/silicon-sahyadri/VayuNode"
                     class="bg-brand-accent hover:bg-brand-accentHover text-white px-8 py-4 rounded-lg font-bold transition-all transform hover:-translate-y-1">
                     Start Contributing
                 </a>
-                <a href="#"
+                <a href="https://discord.gg/QSC84jYQ"
                     class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-lg font-bold transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
                     <i data-lucide="message-circle" class="w-5 h-5"></i>
                     Join Discord
@@ -374,6 +402,43 @@
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
+
+        // Live Data Integration for Demo Purposes
+        async function fetchWeatherData() {
+            // Check if user has allowed geolocation
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    try {
+                        // Use Open-Meteo Free API for demo data
+                        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m`);
+                        const data = await response.json();
+
+                        if (data.current) {
+                            // Update Temp and Humidity with real local data
+                            document.getElementById('val-temp').innerText = `${data.current.temperature_2m}${data.current_units.temperature_2m}`;
+                            document.getElementById('val-humidity').innerText = `${data.current.relative_humidity_2m}${data.current_units.relative_humidity_2m}`;
+
+                            // Simulate other sensors based on environment for "Alive" feel
+                            // This demonstrates how the UI updates dynamically
+                            document.getElementById('val-aqi').innerText = Math.floor(40 + (Math.random() * 15));
+
+                            // Show Badge
+                            document.getElementById('live-api-badge').classList.remove('hidden');
+                        }
+                    } catch (e) {
+                        console.log("Weather fetch failed (likely permission or network)", e);
+                    }
+                }, (error) => {
+                    console.log("Geolocation permission denied or not available.");
+                });
+            }
+        }
+
+        // Fetch on load
+        fetchWeatherData();
     </script>
 </body>
 
