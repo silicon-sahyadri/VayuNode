@@ -68,8 +68,12 @@
                             class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium">Hardware</a>
                         <a href="#community"
                             class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium">Community</a>
-                        <a href="#contribute"
-                            class="bg-brand-accent hover:bg-brand-accentHover text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">Contribute</a>
+
+                        <!-- User Section Placeholder -->
+                        <div id="user-section"
+                            class="inline-flex items-center gap-4 ml-4 pl-4 border-l border-slate-700">
+                            <!-- Injected by JS -->
+                        </div>
                     </div>
                 </div>
                 <!-- Mobile menu button -->
@@ -399,9 +403,158 @@
         </div>
     </footer>
 
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="closeLoginModal()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-4">
+            <div class="glass-panel p-8 rounded-2xl border border-slate-700 shadow-2xl relative">
+                <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+                <div class="text-center mb-8">
+                    <div
+                        class="w-16 h-16 bg-brand-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="user" class="w-8 h-8 text-brand-accent"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-2">Welcome to VayuNode</h2>
+                    <p class="text-slate-400 text-sm">Join the community monitoring network.</p>
+                </div>
+                <form onsubmit="handleLogin(event)" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Username</label>
+                        <input type="text" id="username-input" required
+                            class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-colors"
+                            placeholder="Enter your username">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-brand-accent hover:bg-brand-accentHover text-white font-bold py-3 rounded-lg transition-all transform hover:-translate-y-1">
+                        Start Contributing
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
+
+        // --- User Authentication & Tracking Logic ---
+
+        // Config
+        const IP_API_URL = 'https://ipapi.co/json/';
+
+        // State
+        let currentUser = localStorage.getItem('vayu_username');
+        let currentLocation = JSON.parse(localStorage.getItem('vayu_location')) || null;
+
+        // Elements
+        const loginModal = document.getElementById('login-modal');
+        const userSection = document.getElementById('user-section');
+        const usernameInput = document.getElementById('username-input');
+
+        // Functions
+        function showLoginModal() {
+            loginModal.classList.remove('hidden');
+            usernameInput.focus();
+        }
+
+        function closeLoginModal() {
+            loginModal.classList.add('hidden');
+        }
+
+        async function fetchLocation() {
+            try {
+                const response = await fetch(IP_API_URL);
+                const data = await response.json();
+                if (data.city) {
+                    currentLocation = {
+                        city: data.city,
+                        country_name: data.country_name
+                    };
+                    localStorage.setItem('vayu_location', JSON.stringify(currentLocation));
+                    return currentLocation;
+                }
+            } catch (error) {
+                console.error("Location fetch failed:", error);
+                return null;
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = usernameInput.value.trim();
+            if (!username) return;
+
+            // Save User
+            currentUser = username;
+            localStorage.setItem('vayu_username', currentUser);
+
+            // Fetch Location (in background if needed, but we await for better UX here)
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Locating...";
+            btn.disabled = true;
+
+            await fetchLocation();
+
+            // Reset UI
+            btn.innerText = originalText;
+            btn.disabled = false;
+            closeLoginModal();
+            updateUI();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('vayu_username');
+            localStorage.removeItem('vayu_location');
+            currentUser = null;
+            currentLocation = null;
+            updateUI();
+        }
+
+        function updateUI() {
+            if (currentUser) {
+                const locationText = currentLocation ? `from ${currentLocation.city}` : '';
+                userSection.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden sm:block">
+                        <div class="text-sm font-bold text-white">Welcome, ${currentUser}</div>
+                        <div class="text-xs text-brand-accent">${locationText}</div>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-brand-accent flex items-center justify-center text-white font-bold text-sm">
+                        ${currentUser.charAt(0).toUpperCase()}
+                    </div>
+                    <button onclick="handleLogout()" class="text-slate-400 hover:text-white" title="Logout">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                `;
+            } else {
+                userSection.innerHTML = `
+                    <button onclick="showLoginModal()" 
+                        class="text-slate-300 hover:text-white font-medium text-sm transition-colors flex items-center gap-2">
+                        <i data-lucide="log-in" class="w-4 h-4"></i> Login
+                    </button>
+                    <a href="#contribute"
+                        class="bg-brand-accent hover:bg-brand-accentHover text-white px-4 py-2 rounded-md text-sm font-medium transition-colors hidden sm:block">
+                        Contribute
+                    </a>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUI();
+            // If already logged in but no location, try fetching again
+            if (currentUser && !currentLocation) {
+                fetchLocation().then(updateUI);
+            }
+        });
+
+        // --- End Auth Logic ---
 
         // Live Data Integration for Demo Purposes
         async function fetchWeatherData() {
