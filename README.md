@@ -1,3 +1,7 @@
+<img width="1408" height="768" alt="1770465431020" src="https://github.com/user-attachments/assets/a13c69de-ad6e-40b2-ab00-3c3e2ed84b23" />
+
+
+
 # VayuNode
 
 # **VayuNode: Complete Implementation Blueprint**
