@@ -781,19 +781,19 @@ Mitigation: Comprehensive documentation, video tutorials, mentorship program
 ### **Essential Links:**
 ```
 • GitHub Organization: https://github.com/silicon-sahyadri
-• Documentation: https://docs.vayunode.online
+• Documentation:
 • Discord Community: https://discord.gg/QSC84jYQ
-• Project Dashboard: https://vayunode.online
-• Live Map: https://map.vayunode.online
-• Open Collective: https://opencollective.com/silicon-sahyadri
+• Project Dashboard:
+• Live Map:
+• Open Collective:
 ```
 
 ### **Learning Resources:**
 ```
 • RP2350 Datasheet: https://datasheets.raspberrypi.com
 • BME688 Integration Guide: https://github.com/silicon-sahyadri/bme688-guide
-• NB-IoT Handbook: https://github.com/silicon-sahyadri/nbiot-handbook
-• PCB Design Course: https://learn.vayunode.online/pcb-design
+• NB-IoT Handbook:
+• PCB Design Course: 
 ```
 
 ---
